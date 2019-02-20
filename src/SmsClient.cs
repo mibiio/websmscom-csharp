@@ -8,6 +8,8 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Net;
+using System.Reflection;
+using System.Runtime.Versioning;
 using System.Text;
 using Microsoft.Win32;
 using Websms.Exceptions;
@@ -206,12 +208,10 @@ namespace Websms
             return rtn;
         }
         
-        private String getNETFrameworkVersionNr() {
-			RegistryKey net_versions = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP");
-			string[] version_names = net_versions.GetSubKeyNames();
-			//version names start with 'v', eg, 'v3.5' which needs to be trimmed off before conversion
-			String version = version_names[version_names.Length - 1].Remove(0, 1);
-			return version;
+        private String getNETFrameworkVersionNr()
+        {
+
+            return Assembly.GetEntryAssembly()?.GetCustomAttribute<TargetFrameworkAttribute>()?.FrameworkName;
         }
 
     	/**
